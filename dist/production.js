@@ -319,11 +319,11 @@ function newInterval(floori, offseti, count, field) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__src_shuffle__ = __webpack_require__(188);
 /* unused harmony reexport shuffle */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__src_sum__ = __webpack_require__(189);
-/* unused harmony reexport sum */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_22__src_sum__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__src_ticks__ = __webpack_require__(98);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["c"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_23__src_ticks__["c"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__src_transpose__ = __webpack_require__(101);
 /* unused harmony reexport transpose */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__src_variance__ = __webpack_require__(94);
@@ -1399,7 +1399,7 @@ function linearish(scale) {
 
   scale.ticks = function(count) {
     var d = domain();
-    return Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["i" /* ticks */])(d[0], d[d.length - 1], count == null ? 10 : count);
+    return Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["j" /* ticks */])(d[0], d[d.length - 1], count == null ? 10 : count);
   };
 
   scale.tickFormat = function(count, specifier) {
@@ -1421,16 +1421,16 @@ function linearish(scale) {
       step = i0, i0 = i1, i1 = step;
     }
 
-    step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["g" /* tickIncrement */])(start, stop, count);
+    step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickIncrement */])(start, stop, count);
 
     if (step > 0) {
       start = Math.floor(start / step) * step;
       stop = Math.ceil(stop / step) * step;
-      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["g" /* tickIncrement */])(start, stop, count);
+      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickIncrement */])(start, stop, count);
     } else if (step < 0) {
       start = Math.ceil(start * step) / step;
       stop = Math.floor(stop * step) / step;
-      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["g" /* tickIncrement */])(start, stop, count);
+      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickIncrement */])(start, stop, count);
     }
 
     if (step > 0) {
@@ -7936,14 +7936,14 @@ function calendar(year, month, week, day, hour, minute, second, millisecond, for
       var target = Math.abs(stop - start) / interval,
           i = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["c" /* bisector */])(function(i) { return i[2]; }).right(tickIntervals, target);
       if (i === tickIntervals.length) {
-        step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickStep */])(start / durationYear, stop / durationYear, interval);
+        step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["i" /* tickStep */])(start / durationYear, stop / durationYear, interval);
         interval = year;
       } else if (i) {
         i = tickIntervals[target / tickIntervals[i - 1][2] < tickIntervals[i][2] / target ? i - 1 : i];
         step = i[1];
         interval = i[0];
       } else {
-        step = Math.max(Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickStep */])(start, stop, interval), 1);
+        step = Math.max(Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["i" /* tickStep */])(start, stop, interval), 1);
         interval = millisecond;
       }
     }
@@ -9463,39 +9463,153 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //css dependencies
 
 
-
+//create constants for visualization
 const width = 360,
     height = 360,
     radius = Math.min(width, height) / 2,
     innerRadius = Math.min(width, height) / 4;
 
-const color = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* scaleOrdinal */](["#59914F", "#000201", "#CDE1DB", "#FED25A", "#3B4272", "#008487"]);
+const legendRectSize = 18,
+    legendSpacing = 4;
 
-const fooData = [10,2,3,4,7,6];
-
-let svg = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('#chart').append('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .append('g')
-        .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
+const colors = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleOrdinal */](["#59914F", "#000201", "#CDE1DB", "#FED25A", "#3B4272", "#008487"]);
 
 let arc = __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* arc */]()
     .outerRadius(radius)
-    .innerRadius(innerRadius);
+    .innerRadius(innerRadius)
+    .padAngle(0.05)
+    .cornerRadius(10);
 
-let pie = __WEBPACK_IMPORTED_MODULE_0_d3__["b" /* pie */]()
-    .sort(null)
-    .value(function(d) { return d; });
+//appending area to body to create visualization on
+let svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    //center the visualization in the svg element
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-let path = svg.selectAll('path')
-    .data(pie(fooData))
-    .enter()
+let tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]('#chart')
+  .append('div')
+  .attr('class', 'tooltip');
+
+tooltip.append('div')
+  .attr('class', 'label');
+
+tooltip.append('div')
+  .attr('class', 'count');
+
+tooltip.append('div')
+  .attr('class', 'percent');
+
+//fetch external json
+__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* json */]('../src/assets/teaStats.json', function(err, unformattedData) {
+    if(err) throw err;
+
+    //format json into an array of objects for d3
+    let data = Object.keys(unformattedData).reduce((data, key) => {
+      data.push({
+        label: key,
+        count: unformattedData[key],
+        enabled: true
+      });
+      return data;
+    } ,[]);
+  
+
+    let pie = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* pie */]()
+      .sort(null)
+      //telling the generator what value to use when generating start and
+      //end angles for the arc generator
+      .value(function(d) { return d.count; });
+  
+    console.log(colors);
+    
+    let path = svg.selectAll('path')
+        .data(pie(data)) //transform data into path information for pie arcs
+      .enter()
         .append('path')
         .attr('d', arc)
         .attr('fill', function(d, i) {
-            return color(i);
+          return colors(d.data.label);
+        })
+        .each(function(d) {this._current = d});
+    
+    path.on('mouseover', function(d) {
+      let total = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* sum */](data.map(function(d) {
+        return d.enabled ? d.count : 0;
+      }));
+      let percent = Math.round(1000 * d.data.count / total) / 10;
+      tooltip.select('.label').html(d.data.label);
+      tooltip.select('.count').html(d.data.count);
+      tooltip.select('.percent').html(percent + '%');
+      tooltip.style('display', 'block');
+    });
+
+    path.on('mouseout', function(d){
+      tooltip.style('display', 'none');
+    });
+
+    path.on('mousemove', function(d) {
+      tooltip.style('top', (__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* event */].layerY + 10) + 'px')
+        .style('left', (__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* event */].layerX + 10) + 'px');
+    });
+    
+    let legend = svg.selectAll('.legend')
+        .data(colors.domain())
+      .enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', function(d, i){
+          let height = legendRectSize + legendSpacing;
+          let offset = height * colors.domain().length / 2;
+          let horz = -2 * legendRectSize;
+          let vert = i * height - offset;
+          return 'translate(' + horz + ',' + vert + ')';
         });
 
+        legend.append('rect')
+          .attr('width', legendRectSize)
+          .attr('height', legendRectSize)
+          .style('fill', colors)
+          .style('stroke', colors)
+          .on('click', function(label) {
+            let rect = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */](this);
+            let enabled = true;
+            let totalEnabled = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* sum */](data.map(function(d){
+              return d.enabled ? 1 : 0;
+            }));
+
+            if(rect.attr('class') === 'disabled'){
+              rect.attr('class', '');
+            } else {
+              if(totalEnabled < 2) return;
+              rect.attr('class', 'disabled');
+              enabled = false;
+            }
+
+            pie.value(function(d) {
+              if(d.label === label) d.enabled = enabled;
+              return d.enabled ? d.count : 0;
+            });
+
+            path = path.data(pie(data));
+
+            path.transition()
+              .duration(750)
+              .attrTween('d', function(d) {
+                let interpolate = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* interpolate */](this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                  return arc(interpolate(t));
+                };
+              });
+          });
+        
+        legend.append('text')
+          .attr('x', legendRectSize + legendSpacing)
+          .attr('y', legendRectSize - legendSpacing)
+          .text(function(d) { return d.toUpperCase(); });
+});
 
 
 /***/ }),
@@ -9506,7 +9620,7 @@ let path = svg.selectAll('path')
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__build_package__ = __webpack_require__(174);
 /* unused harmony reexport version */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_array__ = __webpack_require__(3);
-/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["g"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_axis__ = __webpack_require__(191);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3_brush__ = __webpack_require__(195);
@@ -9534,7 +9648,7 @@ let path = svg.selectAll('path')
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_d3_hierarchy__ = __webpack_require__(353);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_d3_interpolate__ = __webpack_require__(5);
-/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_15_d3_interpolate__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_d3_path__ = __webpack_require__(13);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_d3_polygon__ = __webpack_require__(375);
@@ -9546,14 +9660,15 @@ let path = svg.selectAll('path')
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_d3_random__ = __webpack_require__(385);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_d3_request__ = __webpack_require__(390);
-/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_d3_scale__ = __webpack_require__(397);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_d3_selection__ = __webpack_require__(1);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_d3_shape__ = __webpack_require__(430);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_24_d3_shape__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_24_d3_shape__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_24_d3_shape__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_d3_time__ = __webpack_require__(45);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_d3_time_format__ = __webpack_require__(82);
@@ -10026,7 +10141,7 @@ var dependencies = {"d3-array":"1.2.1","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = (function(values, valueof) {
+/* harmony default export */ __webpack_exports__["a"] = (function(values, valueof) {
   var n = values.length,
       i = -1,
       value,
@@ -18990,7 +19105,7 @@ var slice = [].slice;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_html__ = __webpack_require__(391);
 /* unused harmony reexport html */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_json__ = __webpack_require__(392);
-/* unused harmony reexport json */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__src_json__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_text__ = __webpack_require__(393);
 /* unused harmony reexport text */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_xml__ = __webpack_require__(394);
@@ -19029,7 +19144,7 @@ var slice = [].slice;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__type__ = __webpack_require__(43);
 
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Object(__WEBPACK_IMPORTED_MODULE_0__type__["a" /* default */])("application/json", function(xhr) {
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0__type__["a" /* default */])("application/json", function(xhr) {
   return JSON.parse(xhr.responseText);
 }));
 
@@ -19337,7 +19452,7 @@ function identity() {
 /* harmony default export */ __webpack_exports__["a"] = (function(domain, count, specifier) {
   var start = domain[0],
       stop = domain[domain.length - 1],
-      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["h" /* tickStep */])(start, stop, count == null ? 10 : count),
+      step = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["i" /* tickStep */])(start, stop, count == null ? 10 : count),
       precision;
   specifier = Object(__WEBPACK_IMPORTED_MODULE_1_d3_format__["c" /* formatSpecifier */])(specifier == null ? ",f" : specifier);
   switch (specifier.type) {
@@ -19471,7 +19586,7 @@ function log() {
         }
       }
     } else {
-      z = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["i" /* ticks */])(i, j, Math.min(j - i, n)).map(pows);
+      z = Object(__WEBPACK_IMPORTED_MODULE_0_d3_array__["j" /* ticks */])(i, j, Math.min(j - i, n)).map(pows);
     }
 
     return r ? z.reverse() : z;
@@ -22751,7 +22866,7 @@ exports = module.exports = __webpack_require__(467)(false);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "body {\n    color: red;\n}\n\n#chart {\n    position: relative;\n    margin: 0 auto;\n    color: red;\n}\n\n.tooltip {\n    background: #eee;\n    box-shadow: 0 0 5px #999999;\n    color: #333;\n    display: none;\n    font-size: 12px;\n    left: 130px;\n    padding: 10px;\n    position: absolute;\n    text-align: center;\n    top: 95px;\n    width: 80px;\n    z-index: 10;\n}\n\nrect {\n    cursor: pointer;\n    stroke-width: 2px;\n}\n\nrect.disabled {\n    fill: transparent !important;\n}", ""]);
 
 // exports
 
