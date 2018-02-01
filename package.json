@@ -1,0 +1,22 @@
+{
+  "name": "tea-data-viz",
+  "version": "1.0.0",
+  "description": "A pie chart comparing how many cups of tea a person has consumed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricVignola/tea-data-viz.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EricVignola/tea-data-viz/issues"
+  },
+  "homepage": "https://github.com/EricVignola/tea-data-viz#readme",
+  "dependencies": {
+    "d3": "^4.13.0"
+  }
+}
